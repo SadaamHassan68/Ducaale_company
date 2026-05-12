@@ -1,0 +1,698 @@
+/* Global Animations */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideRight {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
+.animate-fade-up { animation: fadeInUp 0.8s ease-out forwards; }
+.animate-scale-in { animation: scaleIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+/* Reveal Base */
+.reveal {
+    opacity: 0;
+    transition: none;
+}
+
+.reveal.active {
+    opacity: 1;
+}
+
+:root {
+    --primary-blue: #0ea5e9;   /* Modern Sky-High Blue */
+    --navy-dark: #0f172a;      /* Deep Professional Navy */
+    --navy-light: #1e293b;     /* Slate Navy Sidebar */
+    --text-dark: #1e293b;      /* Main Slate Text */
+    --text-muted: #64748b;     /* Secondary Slate Text */
+    --text-dim: #94a3b8;       /* Subtle Text/Border */
+    --success-green: #10b981;  /* Premium Emerald Green */
+    --danger-red: #f43f5e;     /* Modern Rose Red */
+    --bg-light: #f8fafc;       /* Clean Studio White */
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    scroll-behavior: smooth;
+    line-height: 1.6;
+}
+
+.text-primary-blue { color: var(--primary-blue) !important; }
+.text-navy-dark { color: var(--navy-dark) !important; }
+.text-muted-custom { color: var(--text-muted) !important; }
+.text-dim-custom { color: var(--text-dim) !important; }
+
+/* Background Utilities */
+.bg-navy-dark { background-color: var(--navy-dark) !important; }
+.bg-primary-blue { background-color: var(--primary-blue) !important; }
+.bg-navy-light { background-color: var(--navy-light) !important; }
+.bg-light-slate { background-color: var(--bg-light) !important; }
+
+/* Text Utilities */
+.text-white-opacity-70 { color: rgba(255, 255, 255, 0.7) !important; }
+.text-white-opacity-50 { color: rgba(255, 255, 255, 0.5) !important; }
+.navbar-ducaale {
+    background: var(--navy-dark);
+    padding: 1rem 0;
+    animation: fadeIn 1s ease-in-out;
+}
+
+
+.navbar-ducaale .nav-link {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.navbar-ducaale .nav-link:hover {
+    color: white !important;
+}
+
+.navbar-brand {
+    color: white !important;
+    font-weight: 800;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Hero Section */
+.hero-corporate {
+    background: linear-gradient(rgba(15, 23, 42, 0.5), rgba(15, 23, 42, 0.5)), url('../img/hero_bg.png') no-repeat center center/cover;
+    height: 70vh;
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    position: relative;
+    padding-bottom: 100px;
+}
+
+.hero-badge {
+    background: var(--primary-blue);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 6px 20px;
+    border-radius: 100px;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+}
+
+.hero-corporate h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.hero-corporate p {
+    font-size: 1.25rem;
+    opacity: 0.9;
+    max-width: 700px;
+}
+
+/* Floating Search */
+.search-float-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    margin-top: -80px;
+    position: relative;
+    z-index: 10;
+}
+
+.search-input-box {
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.search-input-box label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.search-input-box .input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-input-box input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.btn-search-blue {
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-weight: 700;
+    width: 100%;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-search-blue:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+/* Flight Cards - Matching Screenshot Exactly */
+.flight-card-v2 {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    height: 100%;
+    border: none;
+}
+
+.flight-card-v2:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.flight-img-container {
+    height: 240px;
+    position: relative;
+}
+
+.flight-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.top-rated-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    color: var(--text-dark);
+}
+
+.card-body-v2 {
+    padding: 1.5rem;
+}
+
+.route-pill {
+    background: #dbeafe;
+    color: #2563eb;
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.price-text {
+    color: #059669;
+    font-weight: 800;
+    font-size: 1.75rem;
+}
+
+.flight-number-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.flight-info-row {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-book-now {
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-weight: 800;
+    width: 100%;
+    margin-top: 1.5rem;
+    transition: 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-book-now:hover {
+    background: #1d4ed8;
+    transform: scale(1.02);
+    color: white;
+}
+
+
+/* Support Hub Card */
+.support-hub-card {
+    background: var(--navy-dark);
+    border-radius: 24px;
+    padding: 3rem;
+    color: white;
+}
+
+.support-tag {
+    background: var(--primary-blue);
+    padding: 4px 16px;
+    border-radius: 100px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+}
+
+.stats-glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 1.5rem;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 1rem;
+}
+
+.stat-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Newsletter */
+.newsletter-section {
+    background: white;
+    border-radius: 24px;
+    padding: 4rem;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+}
+
+.mail-icon-circle {
+    width: 60px;
+    height: 60px;
+    background: #eff6ff;
+    color: var(--primary-blue);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin: 0 auto 1.5rem;
+}
+
+/* Footer Custom */
+.footer-corporate {
+    background: var(--navy-dark);
+    color: white;
+    padding: 4rem 0 2rem;
+}
+
+.footer-logo {
+    font-weight: 800;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 2rem;
+}
+
+/* Horizontal Flight Cards (Jiif Layout) */
+.flight-card-horizontal {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    transition: 0.3s;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: row;
+    height: 180px;
+}
+
+.flight-card-horizontal:hover {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transform: translateX(10px);
+}
+
+.horizontal-img-box {
+    width: 260px;
+    min-width: 260px;
+    position: relative;
+}
+
+.horizontal-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.horizontal-content {
+    flex-grow: 1;
+    padding: 1.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.horizontal-action-box {
+    width: 220px;
+    min-width: 220px;
+    padding: 1.5rem;
+    border-left: 1.5px dashed #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #f8fafc;
+}
+
+@media (max-width: 991px) {
+    .flight-card-horizontal {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .horizontal-img-box,
+    .horizontal-action-box {
+        width: 100%;
+        border-left: none;
+        border-top: 1.5px dashed #e2e8f0;
+    }
+
+    .horizontal-img-box {
+        height: 200px;
+    }
+}
+
+/* Elite Feature Cards */
+.feature-card-elite {
+    background: white;
+    border-radius: 32px;
+    padding: 3rem 2rem;
+    height: 100%;
+    transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid #f1f5f9;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-card-elite:hover {
+    transform: translateY(-15px);
+    border-color: #e2e8f0;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.06);
+}
+
+.feature-card-elite::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--primary-blue);
+    transform: scaleX(0);
+    transition: 0.5s;
+    transform-origin: left;
+}
+
+.feature-card-elite:hover::before {
+    transform: scaleX(1);
+}
+
+.feature-icon-box {
+    width: 90px;
+    height: 90px;
+    background: #f8fafc;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2rem;
+    font-size: 2.5rem;
+    color: var(--primary-blue);
+    transition: 0.4s;
+}
+
+.feature-card-elite:hover .feature-icon-box {
+    background: var(--primary-blue);
+    color: white;
+    transform: rotate(10deg);
+}
+
+.feature-card-elite h4 {
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.feature-card-elite p {
+    color: #64748b;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+
+/* Elite Grid Flight Cards - High Impact Design */
+.flight-card-elite {
+    background: white;
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+    transition: 0.4s;
+    height: 100%;
+    border: none;
+    margin-bottom: 1.5rem;
+}
+
+.flight-card-elite:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.elite-img-box {
+    position: relative;
+    height: 220px;
+    margin: 10px;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.elite-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.status-badge-elite {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #059669;
+    color: white;
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    z-index: 2;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    background: white;
+    border-radius: 50%;
+}
+
+.brand-badge-elite {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(4px);
+    color: #1e293b;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    z-index: 2;
+}
+
+.price-overlay-elite {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    text-align: right;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.price-label-elite {
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    opacity: 0.9;
+}
+
+.price-value-elite {
+    font-size: 1.75rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.flight-num-overlay {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.flight-num-overlay h3 {
+    margin: 0;
+    font-weight: 800;
+    font-size: 1.25rem;
+}
+
+.elite-card-body {
+    padding: 1.25rem;
+}
+
+.elite-route-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.route-node {
+    text-align: center;
+}
+
+.route-node .code {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #0f172a;
+    display: block;
+    line-height: 1;
+}
+
+.route-node .city {
+    font-size: 0.8rem;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.route-divider-icon {
+    width: 36px;
+    height: 36px;
+    background: #f1f5f9;
+    color: #8b5cf6;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.elite-details-grid {
+    background: #f8fafc;
+    border-radius: 16px;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+}
+
+.detail-sub-item .label {
+    font-size: 0.6rem;
+    font-weight: 800;
+    color: #94a3b8;
+    text-transform: uppercase;
+    display: block;
+}
+
+.detail-sub-item .value {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #334155;
+}
+
+.btn-elite-book {
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 12px;
+    font-weight: 800;
+    width: 100%;
+    transition: 0.3s;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.btn-elite-book:hover {
+    background: #1d4ed8;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    color: white;
+}
