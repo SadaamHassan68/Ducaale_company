@@ -29,7 +29,7 @@ if ($role !== 'Admin' && $role !== 'Staff') {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="<?= base_url('assets/css/app.css') ?>">
-    <link rel="stylesheet" href="<?= base_url('assets/css/admin-premium.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('assets/css/admin-premium.css?v=' . time()) ?>">
 </head>
 <body class="admin-mode">
 
@@ -43,12 +43,12 @@ if ($role !== 'Admin' && $role !== 'Staff') {
             <!-- Topbar -->
             <header class="admin-topbar py-3 px-4 d-flex justify-content-between align-items-center sticky-top">
                 <div class="d-flex align-items-center">
-                    <button class="btn btn-light d-md-none me-3" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
+                    <button class="btn btn-light d-lg-none me-2 me-md-3" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
                         <i class="bi bi-list fs-4"></i>
                     </button>
-                    <h4 class="mb-0 fw-bold text-dark">Backend Portal</h4>
-                    <a href="<?= base_url('index.php') ?>" class="btn btn-sm btn-outline-light ms-3 rounded-pill px-3 py-1 fw-bold border-opacity-25" target="_blank">
-                        <i class="bi bi-globe2 me-1"></i> View Website
+                    <h4 class="mb-0 fw-bold text-dark fs-6 fs-sm-5 fs-md-4">Backend Portal</h4>
+                    <a href="<?= base_url('index.php') ?>" class="btn btn-sm btn-outline-light ms-2 ms-md-3 rounded-pill px-2 px-md-3 py-1 fw-bold border-opacity-25" target="_blank" title="View Website">
+                        <i class="bi bi-globe2 me-md-1"></i><span class="d-none d-md-inline">View Website</span>
                     </a>
                 </div>
                 

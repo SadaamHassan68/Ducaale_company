@@ -4,9 +4,10 @@ require_once __DIR__ . '/includes/functions.php';
 
 session_start();
 
-$ref = $_GET['ref'] ?? '';
-if (!$ref || !isset($_SESSION['user_id'])) {
-    die("Access Denied or Invalid Ticket.");
+$ref = $_GET['ref'] ?? $_GET['pnr'] ?? '';
+
+if (!$ref) {
+    die("Invalid Ticket Reference.");
 }
 
 // Fetch the confirmed booking details
@@ -14,15 +15,17 @@ $stmt = $pdo->prepare("
     SELECT b.id, b.booking_reference, b.final_price, b.status, b.created_at,
            f.flight_number, f.origin, f.destination, f.departure_time, f.arrival_time, f.aircraft_type,
            s.seat_number, s.seat_class,
-           u.name as passenger_name
+           COALESCE(NULLIF(b.passenger_name, ''), u.name) as passenger_name,
+           COALESCE(NULLIF(b.passenger_email, ''), u.email) as passenger_email
     FROM bookings b
     JOIN flights f ON b.flight_id = f.id
     JOIN seats s ON b.seat_id = s.id
     JOIN users u ON b.user_id = u.id
-    WHERE b.booking_reference = ? AND b.user_id = ?
+    WHERE b.booking_reference = ?
 ");
-$stmt->execute([$ref, $_SESSION['user_id']]);
+$stmt->execute([$ref]);
 $ticket = $stmt->fetch();
+
 
 if (!$ticket || $ticket['status'] !== 'Confirmed') {
     die("Ticket not found or booking is not confirmed.");
@@ -52,20 +55,25 @@ if (!$ticket || $ticket['status'] !== 'Confirmed') {
         .value { font-size: 1.1rem; font-weight: 700; color: #000; margin-bottom: 15px; }
         .qr-code { text-align: center; margin-top: 20px; }
         .qr-code i { font-size: 6rem; color: #000; }
+        .qr-code img { width: 120px; border: 1px solid #eee; padding: 5px; background: #fff; }
+        .btn-primary-blue { background: #0ea5e9; color: #fff; border: none; padding: 10px 25px; border-radius: 50px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-block; }
+        .btn-primary-blue:hover { background: #0284c7; color: #fff; }
         
         @media print {
             .no-print { display: none !important; }
-            body { padding: 0; }
-            .boarding-pass { border: 2px solid #000 !important; box-shadow: none !important; }
+            body { padding: 0; margin: 0; }
+            .boarding-pass { border: 2px solid #000 !important; box-shadow: none !important; border-radius: 0 !important; margin: 0 !important; width: 100% !important; }
             .ticket-header { background: #000 !important; color: #fff !important; -webkit-print-color-adjust: exact; }
             .side-info { background: #f8f9fa !important; -webkit-print-color-adjust: exact; }
+            @page { margin: 0.5cm; }
         }
     </style>
+
 </head>
 <body onload="window.print()">
 
     <div class="container text-center no-print mb-4">
-        <button class="btn btn-primary fw-bold px-4" onclick="window.print()"><i class="bi bi-printer me-2"></i>Print Boarding Pass</button>
+        <button class="btn btn-primary-blue fw-bold px-4 rounded-pill" onclick="window.print()"><i class="bi bi-printer me-2"></i>Print Boarding Pass</button>
         <p class="small text-muted mt-2">If the print dialog doesn't open automatically, click the button above.</p>
     </div>
 
@@ -73,7 +81,7 @@ if (!$ticket || $ticket['status'] !== 'Confirmed') {
         <div class="ticket-header">
             <div class="d-flex align-items-center gap-2">
                 <i class="bi bi-airplane-engines-fill fs-3"></i>
-                <h4 class="mb-0 fw-bold">WEHLIYE AIRLINE</h4>
+                <h4 class="mb-0 fw-bold">DUCAALE AIRLINE</h4>
             </div>
             <div class="text-end">
                 <div class="label text-white-50">Booking Reference (PNR)</div>
@@ -137,11 +145,16 @@ if (!$ticket || $ticket['status'] !== 'Confirmed') {
                 </div>
                 
                 <div class="qr-code">
-                    <i class="bi bi-qr-code"></i>
-                    <div class="small text-muted font-monospace mt-1">SCAN AT GATE</div>
+                    <?php 
+                        $ticketUrl = full_url('ticket.php?pnr=' . $ticket['booking_reference']);
+                        $qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=" . urlencode($ticketUrl);
+                    ?>
+                    <img src="<?= $qrUrl ?>" alt="QR Code">
+                    <div class="small text-muted font-monospace mt-1">SCAN TO VERIFY</div>
                 </div>
             </div>
         </div>
+
     </div>
 
     <div class="container text-center mt-4">

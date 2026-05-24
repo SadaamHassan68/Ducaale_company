@@ -61,7 +61,7 @@ class User {
 
     public function requireRole($required_role) {
         if (!$this->isLoggedIn()) {
-            header("Location: /Booking/login.php");
+            header("Location: " . base_url('login.php'));
             exit;
         }
         if ($_SESSION['role'] !== $required_role && $_SESSION['role'] !== 'Admin') {
@@ -106,7 +106,7 @@ class User {
             session_start();
         }
         session_destroy();
-        header("Location: /Booking/login.php");
+        header("Location: " . base_url('login.php'));
         exit;
     }
 }

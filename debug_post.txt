@@ -1,5 +1,0 @@
-Array
-(
-    [action] => book
-    [seat_id] => 787
-)

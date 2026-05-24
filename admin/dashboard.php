@@ -52,19 +52,21 @@ $stmt = $pdo->query("
 $topDestinations = $stmt->fetchAll();
 ?>
 
-<div class="d-flex justify-content-between align-items-center mb-5 mt-2">
+<div class="d-flex flex-column flex-lg-row justify-content-between align-items-start align-items-lg-center gap-3 mb-5 mt-2">
     <div>
-        <h2 class="fw-bold text-dark mb-1 d-flex align-items-center">
+        <h2 class="fw-bold text-dark mb-1 d-flex align-items-center fs-4 fs-md-2">
             <span class="bg-primary-blue bg-opacity-10 p-2 rounded-3 me-3 d-inline-flex">
                 <i class="bi bi-shield-lock-fill text-primary-blue fs-4"></i>
             </span>
             Command Center
         </h2>
-        <p class="text-muted small mb-0 ms-5 ps-2">Ducaale Airline Intelligence & Global Operations Hub</p>
+        <p class="text-muted small mb-0 ms-0 ms-sm-5 ps-0 ps-sm-2">Ducaale Airline Intelligence & Global Operations Hub</p>
     </div>
-    <div class="bg-white border border-secondary border-opacity-10 rounded-pill px-4 py-3 text-muted small shadow-sm d-flex align-items-center">
-        <div class="spinner-grow spinner-grow-sm text-success me-3" role="status" style="width: 10px; height: 10px;"></div>
-        <span class="fw-bold text-dark me-2">SYSTEM ACTIVE:</span> <?= date('l, F j, Y | H:i') ?>
+    <div class="bg-white border border-secondary border-opacity-10 rounded-pill px-3 px-md-4 py-2 py-md-3 text-muted small shadow-sm d-flex align-items-center">
+        <div class="spinner-grow spinner-grow-sm text-success me-2 me-md-3" role="status" style="width: 8px; height: 8px;"></div>
+        <span class="fw-bold text-dark me-2">SYSTEM ACTIVE:</span> 
+        <span class="d-none d-sm-inline"><?= date('l, F j, Y | H:i') ?></span>
+        <span class="d-inline d-sm-none"><?= date('H:i') ?></span>
     </div>
 </div>
 

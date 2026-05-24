@@ -40,7 +40,7 @@
             <hr class="my-5 opacity-10">
 
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 small opacity-50">
-                <div>&copy; <?= date('Y') ?> Ducaale Airline. All rights reserved.</div>
+                <div>&copy; <?= date('Y') ?> Ducaale Airline. All rights reserved. <span class="ms-2 text-warning d-block d-md-inline-block fw-bold">⚠️ Educational / Portfolio Project (Not a Real Commercial Airline)</span></div>
                 <div class="d-flex gap-4">
                     <a href="#" class="text-white"><i class="bi bi-facebook"></i></a>
                     <a href="#" class="text-white"><i class="bi bi-twitter-x"></i></a>

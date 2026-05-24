@@ -164,6 +164,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="mb-5">
                 <h2 class="fw-bold text-dark mb-2">Sign In</h2>
                 <p class="text-muted">Enter your credentials to access your account.</p>
+                <div class="alert alert-warning border-0 rounded-3 p-2 small mt-2">
+                    <i class="bi bi-info-circle-fill me-1"></i> <strong>Simulation:</strong> This is a mock booking system for educational purposes. Do not use real personal passwords.
+                </div>
             </div>
 
             <?php if ($error): ?>

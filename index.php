@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/includes/header.php';
 
+
 $flightManager = new Flight($pdo);
 $upcomingFlights = $flightManager->getUpcomingFlights(6);
 
@@ -328,7 +329,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         </div>
         <h2 class="fw-bold mb-3">Never Miss a Flight Deal</h2>
         <p class="text-muted mb-5">Subscribe to our newsletter and receive exclusive offers, travel guides, and early access to new routes.</p>
-        <form class="d-flex justify-content-center gap-2 mx-auto" style="max-width: 600px;">
+        <form class="d-flex justify-content-center gap-2 mx-auto newsletter-form" style="max-width: 600px;">
             <input type="email" class="form-control rounded-start p-3 border-end-0" placeholder="Your Email Address" style="border-radius: 12px 0 0 12px !important;">
             <button class="btn btn-primary-blue px-5 fw-bold" type="submit" style="border-radius: 0 12px 12px 0 !important;">Subscribe</button>
         </form>

@@ -1,9 +1,12 @@
 <?php
 require_once __DIR__ . '/includes/header.php';
 
-$userAuth->requireRole('Passenger');
+// Access control: Allow viewing via PNR link or if logged in as Admin/Owner
+// $userAuth->requireRole('Passenger'); // Removed strict check to allow Gmail link access
 
-$ref = $_GET['ref'] ?? '';
+
+$ref = $_GET['ref'] ?? $_GET['pnr'] ?? '';
+
 if (!$ref) {
     header("Location: index.php");
     exit;
@@ -14,15 +17,17 @@ $stmt = $pdo->prepare("
     SELECT b.id, b.booking_reference, b.final_price, b.status, b.created_at,
            f.flight_number, f.origin, f.destination, f.departure_time, f.arrival_time, f.aircraft_type,
            s.seat_number, s.seat_class,
-           u.name as passenger_name
+           COALESCE(NULLIF(b.passenger_name, ''), u.name) as passenger_name,
+           COALESCE(NULLIF(b.passenger_email, ''), u.email) as passenger_email
     FROM bookings b
     JOIN flights f ON b.flight_id = f.id
     JOIN seats s ON b.seat_id = s.id
     JOIN users u ON b.user_id = u.id
-    WHERE b.booking_reference = ? AND b.user_id = ?
+    WHERE b.booking_reference = ?
 ");
-$stmt->execute([$ref, $_SESSION['user_id']]);
+$stmt->execute([$ref]);
 $ticket = $stmt->fetch();
+
 
 if (!$ticket || $ticket['status'] !== 'Confirmed') {
     die("Ticket not found or booking is not confirmed.");
@@ -62,22 +67,22 @@ $destWeather = [
                 <div class="ticket-wrapper reveal shadow-2xl" data-animation="animate-scale-in">
                     <!-- Top Notch -->
                     <div class="ticket-header-modern bg-navy-dark text-white p-4 p-md-5 position-relative overflow-hidden">
-                        <div class="d-flex justify-content-between align-items-center position-relative z-index-2">
-                            <div class="d-flex align-items-center gap-4">
-                                <div class="bg-primary-blue p-3 rounded-4 shadow-lg border border-white border-opacity-20">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-start gap-4 position-relative z-index-2 text-center text-md-start">
+                            <div class="d-flex flex-column flex-md-row align-items-center gap-3 gap-md-4">
+                                <div class="bg-primary-blue p-3 rounded-4 shadow-lg border border-white border-opacity-20 d-inline-flex">
                                     <i class="bi bi-airplane-engines-fill fs-1"></i>
                                 </div>
                                 <div>
-                                    <h1 class="fw-black mb-0 letter-spacing-2 tracking-tighter" style="font-size: 2rem;">DUCAALE AIR</h1>
-                                    <div class="d-flex align-items-center gap-2">
+                                    <h1 class="fw-black mb-0 letter-spacing-2 tracking-tighter fs-4 fs-md-2">DUCAALE AIRLINE</h1>
+                                    <div class="d-flex align-items-center justify-content-center justify-content-md-start gap-2 mt-1">
                                         <span class="badge bg-white text-navy-dark rounded-pill px-3 py-1 fw-black small text-uppercase">Elite Voyager</span>
                                         <span class="text-white-opacity-70 small fw-bold text-uppercase letter-spacing-1">Confirmed Pass</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="text-end">
-                                <div class="text-white-opacity-70 small fw-bold text-uppercase mb-1 tracking-widest">PNR RECORD</div>
-                                <h2 class="fw-black text-primary-blue mb-0 font-monospace" style="font-size: 2.5rem;"><?= htmlspecialchars($ticket['booking_reference']) ?></h2>
+                            <div class="text-center text-md-end w-100 w-md-auto mt-2 mt-md-0">
+                                <div class="text-white-opacity-70 small fw-bold text-uppercase mb-1 tracking-widest" style="font-size: 0.65rem;">PNR RECORD</div>
+                                <h2 class="fw-black text-primary-blue mb-0 font-monospace fs-2 fs-md-1"><?= htmlspecialchars($ticket['booking_reference']) ?></h2>
                             </div>
                         </div>
                         
@@ -134,20 +139,20 @@ $destWeather = [
 
                                 <div class="row g-4 text-center">
                                     <div class="col-3">
-                                        <div class="text-muted small fw-black text-uppercase tracking-widest">Flight</div>
-                                        <div class="fs-4 fw-black text-dark"><?= htmlspecialchars($ticket['flight_number']) ?></div>
+                                        <div class="text-muted small fw-black text-uppercase tracking-widest" style="font-size: 0.6rem; letter-spacing: 1px;">Flight</div>
+                                        <div class="fs-6 fs-md-4 fw-black text-dark"><?= htmlspecialchars($ticket['flight_number']) ?></div>
                                     </div>
                                     <div class="col-3">
-                                        <div class="text-muted small fw-black text-uppercase tracking-widest">Date</div>
-                                        <div class="fs-4 fw-black text-dark"><?= date('d M', strtotime($ticket['departure_time'])) ?></div>
+                                        <div class="text-muted small fw-black text-uppercase tracking-widest" style="font-size: 0.6rem; letter-spacing: 1px;">Date</div>
+                                        <div class="fs-6 fs-md-4 fw-black text-dark"><?= date('d M', strtotime($ticket['departure_time'])) ?></div>
                                     </div>
                                     <div class="col-3">
-                                        <div class="text-muted small fw-black text-uppercase tracking-widest">Gate</div>
-                                        <div class="fs-4 fw-black text-dark">TBA</div>
+                                        <div class="text-muted small fw-black text-uppercase tracking-widest" style="font-size: 0.6rem; letter-spacing: 1px;">Gate</div>
+                                        <div class="fs-6 fs-md-4 fw-black text-dark">TBA</div>
                                     </div>
                                     <div class="col-3 text-danger">
-                                        <div class="small fw-black text-uppercase tracking-widest">Boarding</div>
-                                        <div class="fs-4 fw-black"><?= date('H:i', strtotime('-40 minutes', strtotime($ticket['departure_time']))) ?></div>
+                                        <div class="small fw-black text-uppercase tracking-widest" style="font-size: 0.6rem; letter-spacing: 1px;">Boarding</div>
+                                        <div class="fs-6 fs-md-4 fw-black"><?= date('H:i', strtotime('-40 minutes', strtotime($ticket['departure_time']))) ?></div>
                                     </div>
                                 </div>
                             </div>
@@ -169,12 +174,24 @@ $destWeather = [
                                     </div>
                                 </div>
                                 
-                                <div class="qr-zone mt-5 mt-md-auto text-center opacity-25">
-                                    <i class="bi bi-shield-check display-1"></i>
-                                    <div class="small text-muted mt-3 fw-bold font-monospace tracking-widest">OFFICIAL DOCUMENT</div>
+                                <div class="qr-zone mt-5 mt-md-auto text-center">
+                                    <?php 
+                                        $ticketUrl = full_url('ticket.php?pnr=' . $ticket['booking_reference']);
+                                        $qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" . urlencode($ticketUrl);
+                                    ?>
+                                    <img src="<?= $qrUrl ?>" alt="QR Code" class="img-fluid rounded shadow-sm mb-3 border p-2 bg-white">
+                                    <div class="small text-muted fw-bold font-monospace tracking-widest">SCAN TO VERIFY</div>
                                 </div>
+
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Mobile Save Hint (No Print) -->
+                    <div class="bg-light p-3 border-top text-center no-print d-md-none">
+                        <p class="mb-0 small fw-bold text-navy-dark">
+                            <i class="bi bi-phone-vibrate me-2"></i> Using a mobile? Take a <strong>Screenshot</strong> to save your ticket!
+                        </p>
                     </div>
 
                     <!-- Footer Intelligence -->
@@ -228,46 +245,58 @@ $destWeather = [
     
     /* Ultimate Print Styles - Aggressive One-Page Fix */
     @page { 
-        margin: 0 !important; 
-        size: auto;
+        margin: 0.5cm !important; 
+        size: portrait;
     }
     @media print {
-        html, body { 
+        /* Hide everything by default */
+        body { 
             background: #fff !important; 
             margin: 0 !important; 
-            padding: 0 !important; 
-            height: auto !important;
-            overflow: visible !important;
+            padding: 0 !important;
         }
-        nav, header, footer, .no-print, .btn, .bg-navy-dark.py-4, .ticket-footer, .qr-zone, script, style { 
+        nav, header, footer, .no-print, .btn, .ticket-footer, script, .bg-navy-dark.py-4 { 
             display: none !important; 
         }
-        .container-fluid { padding: 0 !important; margin: 0 !important; }
-        .container { padding: 1cm !important; margin: 0 auto !important; width: 100% !important; max-width: 100% !important; }
-        .row { margin: 0 !important; }
-        .col-lg-10 { padding: 0 !important; width: 100% !important; }
         
+        /* Show only the ticket wrapper */
+        .container-fluid, .container, .row, .col-lg-10 { 
+            padding: 0 !important; 
+            margin: 0 !important; 
+            width: 100% !important; 
+            max-width: 100% !important;
+            display: block !important;
+        }
+
         .ticket-wrapper { 
             border-radius: 0 !important; 
             box-shadow: none !important; 
-            border: 1px solid #e2e8f0 !important;
-            margin: 0 !important;
+            border: 1px solid #000 !important;
+            margin: 0 auto !important;
             width: 100% !important;
             page-break-after: avoid !important;
             page-break-inside: avoid !important;
-            transform: scale(0.92);
+            transform: scale(0.95);
             transform-origin: top center;
         }
+        
+        /* Ensure QR code is visible in print */
+        .qr-zone {
+            display: block !important;
+            opacity: 1 !important;
+            margin-top: 20px !important;
+        }
+        .qr-zone img {
+            width: 120px !important;
+        }
+
         .ticket-body { padding: 15px !important; }
-        .p-4, .p-md-5 { padding: 1rem !important; }
-        .mb-5 { margin-bottom: 1rem !important; }
         .bg-navy-dark { background-color: #0f172a !important; color: #fff !important; -webkit-print-color-adjust: exact; }
         .bg-primary-blue { background-color: #0ea5e9 !important; color: #fff !important; -webkit-print-color-adjust: exact; }
         .bg-light { background-color: #f8fafc !important; color: #000 !important; -webkit-print-color-adjust: exact; }
         .text-primary-blue { color: #0ea5e9 !important; -webkit-print-color-adjust: exact; }
-        .fw-black { font-weight: 900 !important; }
-        .perforation-hole { display: none !important; }
     }
+
 </style>
 
 <?php require_once __DIR__ . '/includes/footer.php'; ?>

@@ -1,6 +1,3 @@
-DROP DATABASE IF EXISTS flight_booking_system;
-CREATE DATABASE flight_booking_system;
-USE flight_booking_system;
 
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,

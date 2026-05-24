@@ -29,6 +29,8 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="<?= base_url('assets/css/app.css') ?>">
+    <!-- Google Search Console Verification -->
+    <meta name="google-site-verification" content="oGOaRA2-q-h2SRr7M_a5_rx-tSgwQ6s9Ae6q6nVPUQU" />
 </head>
 <body>
 

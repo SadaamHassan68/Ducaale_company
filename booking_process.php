@@ -157,11 +157,8 @@ function renderSeat($seat) {
                             <div class="plane-wing left"></div>
                             <div class="plane-wing right"></div>
                             
-                            <form method="POST" action="booking_process.php?flight_id=<?= $flight_id ?>" id="seatForm">
-                                <input type="hidden" name="action" value="book">
-                                <input type="hidden" id="selected_seat_id" name="seat_id" value="">
-                                
                                 <div class="seat-grid">
+
                                     <?php 
                                     $currentClass = '';
                                     foreach ($rows as $rowNum => $rowSeats): 
@@ -198,7 +195,8 @@ function renderSeat($seat) {
                                         </div>
                                     <?php endforeach; ?>
                                 </div>
-                            </form>
+                                </div>
+
                             
                             <div class="text-center mt-5">
                                 <div class="small text-muted text-uppercase fw-bold opacity-50 tracking-widest">Tail Section</div>
@@ -222,12 +220,16 @@ function renderSeat($seat) {
           <div class="modal-body py-4">
             <div class="text-center mb-4">
                 <h4 class="mb-1">Seat <span id="modalSeatNum" class="text-primary"></span></h4>
-                <p class="text-muted small">Please provide the passenger details for this journey.</p>
+                <p class="text-muted small mb-2">Please provide the passenger details for this journey.</p>
+                <div class="alert alert-warning border-0 rounded-3 p-2 small mt-0 mx-auto" style="max-width: 400px;">
+                    <i class="bi bi-info-circle-fill me-1"></i> <strong>Simulation:</strong> This is a mock booking. Do not enter real contact or payment information.
+                </div>
             </div>
             
-            <form method="POST" action="booking_process.php?flight_id=<?= $flight_id ?>" id="seatForm">
+            <form method="POST" action="booking_process.php?flight_id=<?= $flight_id ?>" id="bookingForm">
                 <input type="hidden" name="action" value="book">
                 <input type="hidden" id="selected_seat_id" name="seat_id" value="">
+
                 
                 <div class="mb-3">
                     <label class="form-label small text-muted text-uppercase fw-bold">Full Name</label>
@@ -245,7 +247,8 @@ function renderSeat($seat) {
           </div>
           <div class="modal-footer border-top-0 justify-content-center">
             <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" form="seatForm" class="btn btn-primary px-4 fw-bold shadow-sm">Reserve Now <i class="bi bi-airplane-fill ms-2"></i></button>
+            <button type="submit" form="bookingForm" class="btn btn-primary px-4 fw-bold shadow-sm">Reserve Now <i class="bi bi-airplane-fill ms-2"></i></button>
+
           </div>
         </div>
       </div>
@@ -257,8 +260,7 @@ function renderSeat($seat) {
             const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
             const seatInput = document.getElementById('selected_seat_id');
             const modalSeatNum = document.getElementById('modalSeatNum');
-            const form = document.getElementById('seatForm');
-            const confirmBtn = document.getElementById('confirmBookBtn');
+            const form = document.getElementById('bookingForm');
 
             seats.forEach(seat => {
                 seat.addEventListener('click', function() {

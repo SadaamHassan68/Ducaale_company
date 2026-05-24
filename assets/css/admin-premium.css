@@ -36,6 +36,7 @@ body.admin-mode {
 .admin-main-content {
     margin-left: 260px; /* Offset for the fixed sidebar */
     width: calc(100% - 260px);
+    transition: all 0.3s ease;
 }
 
 .admin-card {
@@ -160,3 +161,23 @@ body.admin-mode {
 ::-webkit-scrollbar-track { background: var(--admin-bg); }
 ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
 ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+/* Responsive adjustments for Mobile & Tablets (Up to 991px) */
+@media (max-width: 991.98px) {
+    .admin-sidebar {
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        height: 100vh !important;
+        z-index: 1050 !important;
+        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.3) !important;
+    }
+    .admin-main-content {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+    .admin-topbar {
+        padding: 0.75rem 1rem !important;
+    }
+}
+

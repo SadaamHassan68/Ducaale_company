@@ -1,9 +1,13 @@
 <?php
 $currentPage = basename($_SERVER['PHP_SELF']);
 ?>
-<div class="admin-sidebar d-md-block collapse shadow-sm" id="sidebarMenu">
+<div class="admin-sidebar d-lg-block collapse shadow-sm" id="sidebarMenu">
     <div class="position-sticky pt-0 h-100 d-flex flex-column">
-        <div class="text-center mb-5 py-4 px-3 sidebar-logo-container">
+        <div class="text-center mb-5 py-4 px-3 sidebar-logo-container position-relative">
+            <!-- Mobile/Tablet Close Button -->
+            <button class="btn text-white position-absolute top-0 end-0 m-2 d-lg-none border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-label="Close">
+                <i class="bi bi-x-lg fs-5"></i>
+            </button>
             <div class="bg-primary bg-opacity-10 p-3 rounded-4 d-inline-block mb-3 shadow-sm border border-white border-opacity-10">
                 <i class="bi bi-airplane-engines-fill text-primary fs-1"></i>
             </div>

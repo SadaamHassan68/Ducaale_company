@@ -1,7 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 require_once __DIR__ . '/../includes/admin_header.php';
+
 
 $error = '';
 $success = '';
@@ -41,10 +40,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $stmt = $pdo->prepare("
             SELECT COALESCE(NULLIF(b.passenger_email, ''), u.email) as final_email, 
                    COALESCE(NULLIF(b.passenger_name, ''), u.name) as final_name, 
-                   f.destination 
+                   b.booking_reference, f.destination, f.origin, f.flight_number, f.departure_time,
+                   s.seat_number, s.seat_class
             FROM bookings b 
             JOIN users u ON b.user_id = u.id
             JOIN flights f ON b.flight_id = f.id 
+            JOIN seats s ON b.seat_id = s.id
             WHERE b.booking_reference = ?
         ");
         $stmt->execute([$booking_ref]);
@@ -52,8 +53,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
         if ($details && !empty($details['final_email'])) {
             $emailSubject = "Ticket Confirmed! Your Ducaale Airline Pass - $booking_ref";
-            $emailMessage = "Dear " . $details['final_name'] . ",\n\nYour payment has been verified and your booking to " . $details['destination'] . " is now CONFIRMED.\nBooking Reference: $booking_ref\n\nYou can now download and print your Boarding Pass here: " . base_url('ticket.php?pnr=' . $booking_ref) . "\n\nFly Elite with Ducaale Airline.";
-            sendEmailNotification($details['final_email'], $emailSubject, $emailMessage);
+            $emailHtml = generateTicketHtml($details);
+            sendEmailNotification($details['final_email'], $emailSubject, $emailHtml, true);
         }
 
         $stmt = $pdo->prepare("INSERT INTO activity_logs (admin_id, action, details) VALUES (?, ?, ?)");
@@ -81,7 +82,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 // Fetch recent bookings
 $stmt = $pdo->query("
     SELECT b.id, b.booking_reference, b.status as booking_status, b.final_price, b.created_at, b.seat_id,
-           b.passenger_name, b.passenger_email, b.passenger_phone,
+           COALESCE(NULLIF(b.passenger_name, ''), u.name) as final_name,
+           COALESCE(NULLIF(b.passenger_email, ''), u.email) as final_email,
+           COALESCE(NULLIF(b.passenger_phone, ''), '') as final_phone,
+
            f.flight_number, f.origin, f.destination, f.departure_time,
            s.seat_number, s.seat_class
     FROM bookings b
@@ -94,8 +98,8 @@ $stmt = $pdo->query("
 $bookings = $stmt->fetchAll();
 ?>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold">Manage Bookings</h2>
+<div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3 mb-4">
+    <h2 class="fw-bold fs-3 fs-md-2 mb-0">Manage Bookings</h2>
 </div>
 
 <?php if ($success): ?>
@@ -112,11 +116,11 @@ $bookings = $stmt->fetchAll();
 <?php endif; ?>
 
 <div class="card admin-card">
-    <div class="card-header bg-transparent border-bottom p-4 d-flex justify-content-between align-items-center">
+    <div class="card-header bg-transparent border-bottom p-4 d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3">
         <h5 class="fw-bold mb-0 text-dark">Recent Bookings</h5>
-        <div class="input-group" style="width: 250px;">
-            <span class="input-group-text bg-light border-end-0 border-light shadow-sm"><i class="bi bi-search text-muted"></i></span>
-            <input type="text" class="form-control bg-light border-start-0 border-light shadow-sm" id="bookingSearch" placeholder="Search...">
+        <div class="input-group shadow-sm" style="width: 100%; max-width: 250px;">
+            <span class="input-group-text bg-light border-end-0 border-light"><i class="bi bi-search text-muted"></i></span>
+            <input type="text" class="form-control bg-light border-start-0 border-light" id="bookingSearch" placeholder="Search...">
         </div>
     </div>
     <div class="card-body p-0">
@@ -148,22 +152,35 @@ $bookings = $stmt->fetchAll();
                                     <span class="font-monospace fw-bold text-primary"><?= htmlspecialchars($b['booking_reference']) ?></span>
                                     <div class="small text-muted"><?= date('M d, Y', strtotime($b['created_at'])) ?></div>
                                 </td>
-                                <td>
-                                    <div class="fw-bold text-dark"><?= htmlspecialchars($b['passenger_name']) ?></div>
-                                    <div class="small text-muted mb-1"><?= htmlspecialchars($b['passenger_email']) ?></div>
-                                    <?php if (!empty($b['passenger_phone'])): 
-                                        $cleanPhone = preg_replace('/[^0-9]/', '', $b['passenger_phone']);
-                                        $waMessage = urlencode("Haye " . $b['passenger_name'] . ",\n\nTikidhkaaga Ducaale Airline waa diyaar! \nPNR: " . $b['booking_reference'] . "\nU socda: " . $b['destination'] . "\n\nKa soo dejiso halkan: " . base_url('ticket.php?pnr=' . $b['booking_reference']));
-                                    ?>
-                                        <a href="https://wa.me/<?= $cleanPhone ?>?text=<?= $waMessage ?>" target="_blank" class="badge bg-success bg-opacity-10 text-success text-decoration-none border-0 py-2 px-3">
-                                            <i class="bi bi-whatsapp me-2"></i><?= htmlspecialchars($b['passenger_phone']) ?>
+                                 <td>
+                                    <div class="fw-bold text-dark"><?= htmlspecialchars($b['final_name']) ?></div>
+                                    <div class="small text-muted mb-1"><?= htmlspecialchars($b['final_email']) ?></div>
+                                    <div class="d-flex flex-wrap gap-2 mt-1">
+                                        <?php if (!empty($b['final_phone'])): 
+                                            $cleanPhone = preg_replace('/[^0-9]/', '', $b['final_phone']);
+                                            $waMessage = urlencode("Haye " . $b['final_name'] . ",\n\nTikidhkaaga Ducaale Airline waa diyaar! \nPNR: " . $b['booking_reference'] . "\nU socda: " . $b['destination'] . "\n\nKa soo dejiso halkan: " . full_url('ticket.php?pnr=' . $b['booking_reference']));
+                                        ?>
+                                            <a href="https://wa.me/<?= $cleanPhone ?>?text=<?= $waMessage ?>" target="_blank" class="badge bg-success bg-opacity-10 text-success text-decoration-none border-0 py-2 px-3" title="Send WhatsApp">
+                                                <i class="bi bi-whatsapp me-1"></i>WhatsApp
+                                            </a>
+                                        <?php else: ?>
+                                            <span class="badge bg-light text-muted border-0 py-2 px-3" title="No Phone Number">
+                                                <i class="bi bi-telephone-x me-1"></i>No WA
+                                            </span>
+                                        <?php endif; ?>
+
+                                        <?php 
+                                            $ticketUrl = full_url('ticket.php?pnr=' . $b['booking_reference']);
+                                            $mailSubject = rawurlencode("Ticket Update - " . $b['booking_reference']);
+                                            $mailBody = rawurlencode("Dear " . $b['final_name'] . ",\n\nYour ticket for flight " . $b['flight_number'] . " is ready.\n\nView and Print here: " . $ticketUrl);
+                                        ?>
+                                        <a href="mailto:<?= htmlspecialchars($b['final_email']) ?>?subject=<?= $mailSubject ?>&body=<?= $mailBody ?>" class="badge bg-primary bg-opacity-10 text-primary text-decoration-none border-0 py-2 px-3" title="Send Email">
+                                            <i class="bi bi-envelope-at me-1"></i>Email
                                         </a>
-                                    <?php else: ?>
-                                        <span class="badge bg-light text-muted border-0 py-2 px-3">
-                                            <i class="bi bi-telephone-x me-2"></i>No Contact
-                                        </span>
-                                    <?php endif; ?>
+
+                                    </div>
                                 </td>
+
                                 <td>
                                     <div class="fw-bold"><?= htmlspecialchars($b['flight_number']) ?></div>
                                     <div class="small text-muted"><?= htmlspecialchars($b['origin']) ?> → <?= htmlspecialchars($b['destination']) ?></div>
