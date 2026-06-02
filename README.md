@@ -123,6 +123,11 @@ Follow these simple steps to run this application locally:
    http://localhost/Booking/
    ```
 
+5. **Default Admin Login:**
+   If you imported the database and ran `seed.php`, use the seeded admin account:
+   - Email: `admin@example.com`
+   - Password: `password123`
+
 ---
 
 ## 🔒 Security Practices Built-in
