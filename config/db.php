@@ -4,20 +4,17 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-$is_local = (php_sapi_name() == 'cli' || $_SERVER['REMOTE_ADDR'] == '127.0.0.1' || $_SERVER['REMOTE_ADDR'] == '::1');
+// Local XAMPP configuration
+$host = 'localhost';
+$db   = 'flight_booking_system'; // Using your existing database
+$user = 'root'; 
+$pass = '';
 
-if ($is_local) {
-    $host = '127.0.0.1';
-    $db   = 'flight_booking_system';
-    $user = 'root';
-    $pass = '';
-} else {
-    // InfinityFree Credentials
-    $host = 'sql208.infinityfree.com';
-    $db   = 'if0_41895417_Booking';
-    $user = 'if0_41895417'; 
-    $pass = 'Yv0NUcZUFgp';
-}
+// Live Server configuration (Commented out for local testing)
+// $host = 'sql102.infinityfree.com';
+// $db   = 'if0_42086954_booking';
+// $user = 'if0_42086954'; 
+// $pass = 'OJntmcuzNxicFS';
 
 $charset = 'utf8mb4';
 

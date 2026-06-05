@@ -224,7 +224,8 @@ function generateTicketHtml($details) {
 }
 
 if (session_status() === PHP_SESSION_NONE) {
-
-    session_start();
+    // Disable random garbage collection to prevent permission denied notices on free hosting
+    ini_set('session.gc_probability', 0);
+    @session_start();
 }
 ?>
