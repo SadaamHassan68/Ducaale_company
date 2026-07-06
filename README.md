@@ -140,3 +140,53 @@ Follow these simple steps to run this application locally:
 
 ## 🤝 Contributing
 Contributions are highly welcome! Please fork the repository, make your adjustments, and submit a pull request.
+
+---
+
+## 📋 Common Use Cases
+
+### For Passengers
+1. **Register/Login** → Search flights by origin, destination, date
+2. **Select & Book** → Choose preferred seats and complete payment
+3. **View Bookings** → Access booking history and manage reservations
+4. **Print Tickets** → Generate and print boarding passes with QR codes
+
+### For Admins
+1. **Dashboard Overview** → Monitor key metrics and system health
+2. **Flight Management** → Create, update, or cancel flights
+3. **Seat & Pricing** → Configure seat layouts and dynamic pricing
+4. **Activity Audit** → Review security logs and admin actions
+5. **Support** → Respond to customer inquiries and feedback
+
+---
+
+## 🐛 Troubleshooting
+
+| Issue | Solution |
+| :--- | :--- |
+| **Database connection error** | Verify MySQL is running; check `config/db.php` credentials |
+| **"Table doesn't exist"** | Re-import `database.sql` and ensure schema is complete |
+| **Seats not appearing** | Check `seats` table population; run seed data scripts |
+| **Email not sending** | Configure PHPMailer SMTP settings in `classes/Booking.php` |
+| **QR code not generating** | Verify QR generator library is properly integrated |
+| **Permission denied on uploads** | Ensure `uploads/` folder has write permissions (chmod 755) |
+
+---
+
+## 📧 Contact & Support
+For questions, bug reports, or feature requests, please open an issue on the repository or contact the development team.
+
+---
+
+## 📄 License
+This project is licensed under the MIT License - see LICENSE file for details.
+
+---
+
+## ✨ Acknowledgments
+- Built with PHP 8.x Object-Oriented Architecture
+- Database concurrency handled via SQL transactions
+- UI enhanced with responsive CSS3 and Vanilla JavaScript
+- Email functionality powered by PHPMailer
+
+**Last Updated:** July 5, 2026
