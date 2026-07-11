@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 
 // Local XAMPP configuration
 $host = 'localhost';
-$db   = 'flight_booking_system'; // Using your existing database
+$db   = 'flight_booking_system'; // 
 $user = 'root'; 
 $pass = '';
 
